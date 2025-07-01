@@ -1,1 +1,630 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lebenslauf - Boris Kumbric</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    const portfolioAuth = sessionStorage.getItem('portfolio_auth');
+    const authTimestamp = sessionStorage.getItem('auth_timestamp');
+    
+    if (portfolioAuth !== 'true' || !authTimestamp) {
+      window.location.href = 'index.html';
+    } else {
+      const elapsed = Date.now() - parseInt(authTimestamp);
+      const twentyFourHours = 24 * 60 * 60 * 1000;
+      
+      if (elapsed > twentyFourHours) {
+        sessionStorage.removeItem('portfolio_auth');
+        sessionStorage.removeItem('auth_timestamp');
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #334155;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: white;
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .navbar {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .navbar a {
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 6px;
+    }
+    
+    .navbar a:hover {
+      color: #334155;
+      background: #f1f5f9;
+    }
+    
+    .navbar a.active {
+      color: #1e293b;
+      background: #e2e8f0;
+      font-weight: 600;
+    }
+    
+    .portfolio-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    
+    .logout-btn {
+      background: #334155;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .logout-btn:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+    }
+    
+    .main-container {
+      padding: 60px 20px;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .cv-container {
+      max-width: 1000px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .cv-header {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: white;
+      padding: 60px 40px;
+      text-align: center;
+    }
+    
+    .profile-section {
+      position: relative;
+      z-index: 2;
+    }
+    
+    .profile-img {
+      width: 140px;
+      height: 170px;
+      border-radius: 8px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      margin: 0 auto 30px;
+      display: block;
+      transition: transform 0.3s ease;
+      object-fit: cover;
+      object-position: center;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .profile-img:hover {
+      transform: scale(1.02);
+    }
+    
+    .cv-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+    
+    .cv-header h2 {
+      font-size: 1.3rem;
+      font-weight: 400;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+    
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    
+    .cv-content {
+      padding: 50px 40px;
+    }
+    
+    .section {
+      margin-bottom: 50px;
+    }
+    
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 30px;
+      background: #334155;
+      border-radius: 2px;
+    }
+    
+    .experience-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .experience-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: #334155;
+      border-radius: 4px 0 0 4px;
+    }
+    
+    .experience-item:hover {
+      border-color: #cbd5e1;
+      transform: translateX(4px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .experience-item h4 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+    
+    .company {
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 4px;
+    }
+    
+    .duration {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+    
+    .experience-item p {
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    
+    .experience-item ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    .experience-item li {
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 8px;
+      position: relative;
+      padding-left: 20px;
+    }
+    
+    .experience-item li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #334155;
+      font-weight: bold;
+    }
+    
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    .skill-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #334155;
+      border-radius: 8px 8px 0 0;
+    }
+    
+    .skill-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      border-color: #cbd5e1;
+    }
+    
+    .skill-card .icon {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+    
+    .skill-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    
+    .interests-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .interest-tag {
+      background: #334155;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .interest-tag:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+    
+    .additional-info {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+    }
+    
+    .additional-info h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 20px;
+    }
+    
+    .additional-info p {
+      color: #475569;
+      line-height: 1.7;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .contact-info {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+      }
+      
+      .cv-header {
+        padding: 40px 20px;
+      }
+      
+      .cv-content {
+        padding: 30px 20px;
+      }
+      
+      .cv-header h1 {
+        font-size: 2.2rem;
+      }
+      
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      header {
+        padding: 15px 20px;
+      }
+      
+      .navbar {
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
 
+<header>
+  <h2 class="portfolio-title">Portfolio</h2>
+  <nav class="navbar">
+    <a href="wer-bin-ich.html" class="active">Über mich</a>
+    <a href="bisherige-leistungen.html">Erfahrungen</a>
+    <a href="kontakt.html">Kontakt</a>
+    <a href="unterlagen.html">Unterlagen</a>
+    <button class="logout-btn" onclick="logout()">Abmelden</button>
+  </nav>
+</header>
+
+<div class="main-container">
+  <div class="cv-container">
+    <div class="cv-header">
+      <div class="profile-section">
+        <img src="Unterlagen/Bild (2).jpg" alt="Boris Kumbric" class="profile-img">
+        <h1>Boris Kumbric</h1>
+        <h2>Informatiker EFZ - Plattformentwicklung</h2>
+        
+        <div class="contact-info">
+          <div class="contact-item">
+            <span>📧</span>
+            boris.kumbric@swisscom.com
+          </div>
+          <div class="contact-item">
+            <span>📞</span>
+            +41 79 501 29 51
+          </div>
+          <div class="contact-item">
+            <span>📍</span>
+            Bellach, Solothurn
+          </div>
+          <div class="contact-item">
+            <span>📅</span>
+            18. April 2007
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cv-content">
+      <div class="section">
+        <h3 class="section-title">Berufserfahrung</h3>
+        <div class="experience-item">
+          <h4>Informatiker EFZ - Plattformentwicklung (Lehrling)</h4>
+          <div class="company">Swisscom AG</div>
+          <div class="duration">August 2023 - Juli 2027 (2. Lehrjahr)</div>
+          <p>Ausbildung zum Informatiker mit Fachrichtung Plattformentwicklung. Praktische Erfahrungen in verschiedenen Projekten und Abteilungen bei Swisscom.</p>
+        </div>
+        
+        <div class="experience-item">
+          <h4>Cablex Field Service</h4>
+          <div class="company">Swisscom AG - Cablex</div>
+          <div class="duration">6 Monate</div>
+          <p>Praktische Erfahrungen im Aussendienst und bei der Installation von Telekommunikationsanlagen.</p>
+          <ul>
+            <li>Installation und Wartung von Netzwerkkomponenten</li>
+            <li>Kundenbetreuung vor Ort</li>
+            <li>Technische Problemlösung im Field Service</li>
+            <li>Arbeiten mit professioneller Installationsausrüstung</li>
+          </ul>
+        </div>
+        
+        <div class="experience-item">
+          <h4>Mac Workplace</h4>
+          <div class="company">Swisscom AG - Mac Support</div>
+          <div class="duration">1 Jahr</div>
+          <p>Spezialisierung auf Apple-Systeme und Mac-Support in der Arbeitsplatzumgebung.</p>
+          <ul>
+            <li>macOS-Administration und Systemkonfiguration</li>
+            <li>Apple Business Manager und Mobile Device Management</li>
+            <li>Deployment von Mac-Systemen in Unternehmensumgebungen</li>
+            <li>Troubleshooting spezifischer Mac-Probleme</li>
+          </ul>
+        </div>
+        
+        <div class="experience-item">
+          <h4>Datacenter</h4>
+          <div class="company">Swisscom AG - Rechenzentrum</div>
+          <div class="duration">6 Monate</div>
+          <p>Einblicke in die kritische Infrastruktur und moderne Rechenzentren.</p>
+          <ul>
+            <li>Server-Administration und -wartung</li>
+            <li>Netzwerk-Infrastruktur in grossen Umgebungen</li>
+            <li>Virtualisierung und Systemüberwachung</li>
+            <li>Backup- und Recovery-Strategien</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Ausbildung</h3>
+        <div class="experience-item">
+          <h4>Berufslehre Informatiker EFZ - Plattformentwicklung</h4>
+          <div class="company">Swisscom AG & Berufsfachschule</div>
+          <div class="duration">August 2023 - Juli 2027</div>
+          <p>4-jährige Ausbildung mit eidgenössischem Fähigkeitszeugnis in der Fachrichtung Plattformentwicklung.</p>
+        </div>
+        
+        <div class="experience-item">
+          <h4>Sekundarschule</h4>
+          <div class="company">Sekundarschule Bellach</div>
+          <div class="duration">2020 - 2023</div>
+          <p>Abschluss der obligatorischen Schulzeit mit erfolgreichem Übergang in die Berufslehre.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Technische Kenntnisse</h3>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <span class="icon">⚙️</span>
+            <h4>Git & Versionskontrolle</h4>
+          </div>
+          <div class="skill-card">
+            <span class="icon">🍎</span>
+            <h4>Apple Ecosystem</h4>
+          </div>
+          <div class="skill-card">
+            <span class="icon">🌐</span>
+            <h4>Netzwerktechnik</h4>
+          </div>
+          <div class="skill-card">
+            <span class="icon">☁️</span>
+            <h4>Cloud Computing</h4>
+          </div>
+          <div class="skill-card">
+            <span class="icon">💻</span>
+            <h4>System Administration</h4>
+          </div>
+          <div class="skill-card">
+            <span class="icon">🔒</span>
+            <h4>IT-Sicherheit</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Persönliche Kompetenzen</h3>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <span class="icon">🎯</span>
+            <h4>Zielorientierung</h4>
+          </div>
+          <div class="skill-card">
+            <span class="icon">⚡</span>
+            <h4>Schnelle Auffassung</h4>
+          </div>
+          <div class="skill-card">
+            <span class="icon">⏰</span>
+            <h4>Zuverlässigkeit</h4>
+          </div>
+          <div class="skill-card">
+            <span class="icon">🔍</span>
+            <h4>Detail­orientierung</h4>
+          </div>
+          <div class="skill-card">
+            <span class="icon">🤝</span>
+            <h4>Teamfähigkeit</h4>
+          </div>
+          <div class="skill-card">
+            <span class="icon">📚</span>
+            <h4>Lernbereitschaft</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Interessen</h3>
+        <div class="interests-grid">
+          <div class="interest-tag">Fitness & Sport</div>
+          <div class="interest-tag">Technologie</div>
+          <div class="interest-tag">Software­entwicklung</div>
+          <div class="interest-tag">Apple Produkte</div>
+          <div class="interest-tag">Innovation</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">Persönliches Profil</h3>
+        <div class="additional-info">
+          <h4>Berufliche Motivation</h4>
+          <p>Als angehender Informatiker mit Fachrichtung Plattformentwicklung bringe ich eine ausgeprägte Leidenschaft für Technologie und Innovation mit. Meine bisherigen Erfahrungen in verschiedenen Bereichen bei Swisscom haben mir ein fundiertes Verständnis für komplexe IT-Systeme vermittelt.</p>
+          
+          <p>Ich zeichne mich durch eine strukturierte Arbeitsweise, hohe Zuverlässigkeit und die Fähigkeit aus, mich schnell in neue Technologien einzuarbeiten. Mein Ziel ist es, nach Abschluss der Ausbildung meine Kompetenzen kontinuierlich zu erweitern und einen wertvollen Beitrag in anspruchsvollen IT-Projekten zu leisten.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function checkAuth() {
+    const portfolioAuth = sessionStorage.getItem('portfolio_auth');
+    const authTimestamp = sessionStorage.getItem('auth_timestamp');
+    
+    if (portfolioAuth !== 'true' || !authTimestamp) {
+      window.location.href = 'index.html';
+      return false;
+    }
+    
+    const elapsed = Date.now() - parseInt(authTimestamp);
+    const twentyFourHours = 24 * 60 * 60 * 1000;
+    
+    if (elapsed > twentyFourHours) {
+      alert('Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.');
+      logout();
+      return false;
+    }
+    
+    return true;
+  }
+  
+  function logout() {
+    sessionStorage.removeItem('portfolio_auth');
+    sessionStorage.removeItem('auth_timestamp');
+    window.location.href = 'index.html';
+  }
+  
+  window.onload = function() {
+    checkAuth();
+  }
+  
+  setInterval(checkAuth, 30000);
+</script>
+
+</body>
+</html>
