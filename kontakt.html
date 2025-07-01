@@ -1,1 +1,622 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontakt - Boris Kumbric</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <script>
+      const portfolioAuth = sessionStorage.getItem('portfolio_auth');
+      const authTimestamp = sessionStorage.getItem('auth_timestamp');
+      
+      if (portfolioAuth !== 'true' || !authTimestamp) {
+        window.location.href = 'index.html';
+      } else {
+        const elapsed = Date.now() - parseInt(authTimestamp);
+        const twentyFourHours = 24 * 60 * 60 * 1000;
+        
+        if (elapsed > twentyFourHours) {
+          sessionStorage.removeItem('portfolio_auth');
+          sessionStorage.removeItem('auth_timestamp');
+          window.location.href = 'index.html';
+        }
+      }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            min-height: 100vh;
+        }
+
+        header {
+            background: white;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .navbar {
+            display: flex;
+            gap: 30px;
+        }
+
+        .navbar a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .navbar a:hover {
+            color: #334155;
+            background: #f1f5f9;
+        }
+
+        .navbar a.active {
+            color: #1e293b;
+            background: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .portfolio-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .logout-btn {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #1e293b;
+            transform: translateY(-1px);
+        }
+
+        .main-container {
+            padding: 60px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content-container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .page-header {
+            background: white;
+            border-radius: 12px;
+            padding: 50px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #475569;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .contact-info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .contact-info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-info-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .contact-item:hover {
+            border-color: #cbd5e1;
+            transform: translateX(4px);
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-icon {
+            font-size: 1.8rem;
+            width: 50px;
+            height: 50px;
+            background: #334155;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-details h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .contact-details p {
+            color: #475569;
+            font-size: 1rem;
+        }
+
+        .contact-details a {
+            color: #334155;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-details a:hover {
+            color: #1e293b;
+            text-decoration: underline;
+        }
+
+        .contact-form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .contact-form-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #334155;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: #334155;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .submit-btn:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(51, 65, 85, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .form-notice {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            color: #166534;
+        }
+
+        .form-notice h4 {
+            margin-bottom: 8px;
+            color: #15803d;
+            font-weight: 600;
+        }
+
+        .alternative-contact {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .alternative-contact h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+        }
+
+        .alternative-contact p {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .email-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: #334155;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .email-btn:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(51, 65, 85, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                padding: 30px 20px;
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .contact-info-card,
+            .contact-form-card {
+                padding: 30px 20px;
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .navbar {
+                gap: 15px;
+            }
+
+            .alternative-contact {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2 class="portfolio-title">Portfolio</h2>
+    <nav class="navbar">
+        <a href="wer-bin-ich.html">Über mich</a>
+        <a href="bisherige-leistungen.html">Erfahrungen</a>
+        <a href="kontakt.html" class="active">Kontakt</a>
+        <a href="unterlagen.html">Unterlagen</a>
+        <button class="logout-btn" onclick="logout()">Abmelden</button>
+    </nav>
+</header>
+
+<div class="main-container">
+    <div class="content-container">
+        <div class="page-header">
+            <h1>Kontakt</h1>
+            <p>Für Fragen zu meiner Person oder berufliche Anfragen stehe ich Ihnen gerne zur Verfügung. Ich freue mich auf Ihre Nachricht.</p>
+        </div>
+
+        <div class="contact-grid">
+            <!-- Kontaktinformationen -->
+            <div class="contact-info-card">
+                <h2>📞 Kontaktdaten</h2>
+
+                <div class="contact-item" onclick="copyToClipboard('boris.kumbric@swisscom.com')">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-details">
+                        <h4>E-Mail</h4>
+                        <p><a href="mailto:boris.kumbric@swisscom.com">boris.kumbric@swisscom.com</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-item" onclick="copyToClipboard('+41 79 501 29 51')">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-details">
+                        <h4>Telefon</h4>
+                        <p><a href="tel:+41795012951">+41 79 501 29 51</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-details">
+                        <h4>Standort</h4>
+                        <p>Bellach, Kanton Solothurn</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">💼</div>
+                    <div class="contact-details">
+                        <h4>Position</h4>
+                        <p>Informatiker EFZ - Plattformentwicklung</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kontaktformular -->
+            <div class="contact-form-card">
+                <h2>✉️ Nachricht senden</h2>
+
+                <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                    <input type="hidden" name="access_key" value="89e9d896-ea74-474d-94da-24e439e72040">
+                    <input type="hidden" name="subject" value="Anfrage über Portfolio">
+                    <input type="hidden" name="from_name" value="Portfolio Kontaktformular">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-Mail *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject_custom">Betreff</label>
+                        <input type="text" id="subject_custom" name="subject_custom" placeholder="Thema Ihrer Anfrage">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Nachricht *</label>
+                        <textarea id="message" name="message" placeholder="Ihre Nachricht..." required></textarea>
+                    </div>
+
+                    <input type="checkbox" name="botcheck" style="display: none;">
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        📤 Nachricht senden
+                    </button>
+                </form>
+
+                <div class="form-notice">
+                    <h4>✅ Formular einsatzbereit</h4>
+                    <p>Das Kontaktformular ist funktionsfähig und leitet Nachrichten direkt an mich weiter.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="alternative-contact">
+            <h3>Direkter Kontakt</h3>
+            <p>Alternativ können Sie mir auch direkt eine E-Mail schreiben. Ich antworte üblicherweise innerhalb von 24 Stunden.</p>
+            <a href="mailto:boris.kumbric@swisscom.com?subject=Anfrage%20über%20Portfolio&body=Sehr%20geehrter%20Herr%20Kumbric,%0A%0A" class="email-btn">
+                <span>📧</span>
+                E-Mail verfassen
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkAuth() {
+      const portfolioAuth = sessionStorage.getItem('portfolio_auth');
+      const authTimestamp = sessionStorage.getItem('auth_timestamp');
+      
+      if (portfolioAuth !== 'true' || !authTimestamp) {
+        window.location.href = 'index.html';
+        return false;
+      }
+      
+      const elapsed = Date.now() - parseInt(authTimestamp);
+      const twentyFourHours = 24 * 60 * 60 * 1000;
+      
+      if (elapsed > twentyFourHours) {
+        alert('Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.');
+        logout();
+        return false;
+      }
+      
+      return true;
+    }
+    
+    function logout() {
+      sessionStorage.removeItem('portfolio_auth');
+      sessionStorage.removeItem('auth_timestamp');
+      window.location.href = 'index.html';
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            const originalText = event.target.textContent;
+            event.target.textContent = 'Kopiert ✓';
+            event.target.style.color = '#16a34a';
+
+            setTimeout(() => {
+                event.target.textContent = originalText;
+                event.target.style.color = '';
+            }, 2000);
+        }).catch(function() {
+            console.log('Kopieren nicht möglich');
+        });
+    }
+
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.innerHTML;
+
+        submitBtn.innerHTML = '📤 Wird versendet...';
+        submitBtn.disabled = true;
+
+        const formData = new FormData(this);
+
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                submitBtn.innerHTML = '✅ Gesendet!';
+                submitBtn.style.background = '#16a34a';
+
+                this.reset();
+
+                alert('✅ Ihre Nachricht wurde erfolgreich versendet!\n\nIch werde Ihnen schnellstmöglich antworten.');
+
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.background = '';
+                    submitBtn.disabled = false;
+                }, 3000);
+
+            } else {
+                throw new Error('Versand fehlgeschlagen');
+            }
+        })
+        .catch(error => {
+            console.error('Fehler:', error);
+
+            submitBtn.innerHTML = '❌ Fehler';
+            submitBtn.style.background = '#dc2626';
+
+            alert('❌ Fehler beim Versenden!\n\nBitte versuchen Sie es erneut oder kontaktieren Sie mich direkt per E-Mail.');
+
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.style.background = '';
+                submitBtn.disabled = false;
+            }, 3000);
+        });
+    });
+    
+    window.onload = function() {
+      checkAuth();
+    }
+    
+    setInterval(checkAuth, 30000);
+</script>
+
+</body>
+</html>
