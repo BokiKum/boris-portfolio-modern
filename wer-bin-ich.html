@@ -289,6 +289,7 @@
       text-align: center;
       transition: all 0.3s ease;
       position: relative;
+      cursor: pointer;
     }
     
     .skill-card::before {
@@ -318,6 +319,67 @@
       font-size: 1rem;
       font-weight: 600;
       color: #1e293b;
+      margin-bottom: 15px;
+    }
+    
+    .skill-progress {
+      width: 100%;
+      height: 0;
+      background: #f1f5f9;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 12px;
+      transition: all 0.4s ease;
+      opacity: 0;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .skill-card:hover .skill-progress {
+      height: 25px;
+      opacity: 1;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(135deg, #334155 0%, #475569 100%);
+      border-radius: 3px;
+      transition: width 0.8s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .progress-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .skill-level-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #475569;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 1;
     }
     
     .interests-grid {
@@ -510,29 +572,53 @@
       <div class="section">
         <h3 class="section-title">Technische Kenntnisse</h3>
         <div class="skills-grid">
-          <div class="skill-card">
+          <div class="skill-card" data-level="70">
             <span class="icon">⚙️</span>
             <h4>Git & Versionskontrolle</h4>
+            <div class="skill-progress">
+              <div class="skill-level-text">70%</div>
+              <div class="progress-bar" style="width: 70%;">70%</div>
+            </div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" data-level="90">
             <span class="icon">🍎</span>
             <h4>Apple Ecosystem</h4>
+            <div class="skill-progress">
+              <div class="skill-level-text">90%</div>
+              <div class="progress-bar" style="width: 90%;">90%</div>
+            </div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" data-level="80">
             <span class="icon">🌐</span>
             <h4>Netzwerktechnik</h4>
+            <div class="skill-progress">
+              <div class="skill-level-text">80%</div>
+              <div class="progress-bar" style="width: 80%;">80%</div>
+            </div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" data-level="75">
             <span class="icon">☁️</span>
             <h4>Cloud Computing</h4>
+            <div class="skill-progress">
+              <div class="skill-level-text">75%</div>
+              <div class="progress-bar" style="width: 75%;">75%</div>
+            </div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" data-level="80">
             <span class="icon">💻</span>
             <h4>System Administration</h4>
+            <div class="skill-progress">
+              <div class="skill-level-text">80%</div>
+              <div class="progress-bar" style="width: 80%;">80%</div>
+            </div>
           </div>
-          <div class="skill-card">
+          <div class="skill-card" data-level="60">
             <span class="icon">🔒</span>
             <h4>IT-Sicherheit</h4>
+            <div class="skill-progress">
+              <div class="skill-level-text">60%</div>
+              <div class="progress-bar" style="width: 60%;">60%</div>
+            </div>
           </div>
         </div>
       </div>
