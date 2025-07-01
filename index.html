@@ -1,1 +1,256 @@
 
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boris Kumbric - Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .auth-container {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 60px 50px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      max-width: 480px;
+      margin: 20px;
+      animation: fadeInUp 1s ease-out;
+      color: #1e293b;
+      border: 1px solid rgba(71, 85, 105, 0.1);
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #1e293b;
+      letter-spacing: -1px;
+    }
+    
+    .auth-container h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      letter-spacing: -0.5px;
+      color: #334155;
+    }
+    
+    .auth-container p {
+      font-size: 1.1rem;
+      color: #64748b;
+      margin-bottom: 35px;
+      line-height: 1.6;
+    }
+    
+    .password-form {
+      margin-bottom: 20px;
+    }
+    
+    .password-input {
+      width: 100%;
+      padding: 16px 20px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 1rem;
+      margin-bottom: 25px;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .password-input::placeholder {
+      color: #94a3b8;
+    }
+    
+    .password-input:focus {
+      outline: none;
+      border-color: #475569;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+    }
+    
+    .login-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 32px;
+      background: #334155;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      width: 100%;
+    }
+    
+    .login-btn:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(51, 65, 85, 0.3);
+    }
+    
+    .error-message {
+      color: #dc2626;
+      margin-top: 15px;
+      display: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    
+    .info {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      color: #64748b;
+    }
+    
+    .lock-icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #475569;
+    }
+    
+    @media (max-width: 768px) {
+      .auth-container {
+        padding: 40px 30px;
+        margin: 15px;
+      }
+      
+      .logo {
+        font-size: 2.2rem;
+      }
+      
+      .auth-container h1 {
+        font-size: 1.8rem;
+      }
+      
+      .auth-container p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-container" id="authContainer">
+  <div class="lock-icon">🔒</div>
+  <div class="logo">Portfolio</div>
+  <h1>Authentifizierung erforderlich</h1>
+  <p>Bitte geben Sie das Passwort ein, um auf Boris Kumbric's Portfolio zuzugreifen.</p>
+  
+  <form class="password-form" onsubmit="checkPassword(event)">
+    <input 
+      type="password" 
+      class="password-input" 
+      id="passwordInput" 
+      placeholder="Passwort eingeben..."
+      required
+    >
+    <button type="submit" class="login-btn">
+      <span>🔓</span>
+      Zugang gewähren
+    </button>
+  </form>
+  
+  <div class="error-message" id="errorMessage">
+    ❌ Ungültiges Passwort. Bitte versuchen Sie es erneut.
+  </div>
+  
+  <div class="info">
+    <p>🔐 Geschützter Bereich</p>
+  </div>
+</div>
+
+<script>
+  // Mehrfach verschleiertes Passwort
+  const k1 = [80, 111, 114, 116, 102, 111, 108, 105, 111, 50, 48, 50, 53];
+  const k2 = btoa(String.fromCharCode(...k1.map(x => x ^ 42)));
+  const k3 = k2.split('').reverse().join('');
+  const k4 = k3.replace(/[A-Za-z]/g, c => String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26));
+  
+  function getCorrectPassword() {
+    const step1 = k4.replace(/[A-Za-z]/g, c => String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26));
+    const step2 = step1.split('').reverse().join('');
+    const step3 = atob(step2);
+    return step3.split('').map(c => String.fromCharCode(c.charCodeAt(0) ^ 42)).join('');
+  }
+  
+  function checkPassword(event) {
+    event.preventDefault();
+    
+    const inputPassword = document.getElementById('passwordInput').value;
+    const correctPassword = getCorrectPassword();
+    const errorMessage = document.getElementById('errorMessage');
+    
+    if (inputPassword === correctPassword) {
+      sessionStorage.setItem('portfolio_auth', 'true');
+      sessionStorage.setItem('auth_timestamp', Date.now().toString());
+      window.location.href = 'wer-bin-ich.html';
+    } else {
+      errorMessage.style.display = 'block';
+      document.getElementById('passwordInput').style.borderColor = '#dc2626';
+      
+      setTimeout(() => {
+        errorMessage.style.display = 'none';
+        document.getElementById('passwordInput').style.borderColor = '#e2e8f0';
+        document.getElementById('passwordInput').value = '';
+      }, 3000);
+    }
+  }
+  
+  window.onload = function() {
+    const portfolioAuth = sessionStorage.getItem('portfolio_auth');
+    const authTimestamp = sessionStorage.getItem('auth_timestamp');
+    
+    if (portfolioAuth === 'true' && authTimestamp) {
+      const elapsed = Date.now() - parseInt(authTimestamp);
+      const twentyFourHours = 24 * 60 * 60 * 1000;
+      
+      if (elapsed < twentyFourHours) {
+        window.location.href = 'wer-bin-ich.html';
+      } else {
+        sessionStorage.removeItem('portfolio_auth');
+        sessionStorage.removeItem('auth_timestamp');
+      }
+    }
+  }
+</script>
+
+</body>
+</html>
