@@ -1,1 +1,532 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unterlagen - Boris Kumbric</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    const portfolioAuth = sessionStorage.getItem('portfolio_auth');
+    const authTimestamp = sessionStorage.getItem('auth_timestamp');
+    
+    if (portfolioAuth !== 'true' || !authTimestamp) {
+      window.location.href = 'index.html';
+    } else {
+      const elapsed = Date.now() - parseInt(authTimestamp);
+      const twentyFourHours = 24 * 60 * 60 * 1000;
+      
+      if (elapsed > twentyFourHours) {
+        sessionStorage.removeItem('portfolio_auth');
+        sessionStorage.removeItem('auth_timestamp');
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #334155;
+      min-height: 100vh;
+    }
+    
+    header {
+      background: white;
+      padding: 20px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .navbar {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .navbar a {
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 6px;
+    }
+    
+    .navbar a:hover {
+      color: #334155;
+      background: #f1f5f9;
+    }
+    
+    .navbar a.active {
+      color: #1e293b;
+      background: #e2e8f0;
+      font-weight: 600;
+    }
+    
+    .portfolio-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    
+    .logout-btn {
+      background: #334155;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .logout-btn:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+    }
+    
+    .main-container {
+      padding: 60px 20px;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .content-container {
+      max-width: 1000px;
+      width: 100%;
+    }
+    
+    .page-header {
+      background: white;
+      border-radius: 12px;
+      padding: 50px;
+      text-align: center;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+    }
+    
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+    
+    .page-header p {
+      font-size: 1.2rem;
+      color: #475569;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .documents-grid {
+      display: grid;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .document-card {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .document-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .document-icon {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      display: block;
+      color: #334155;
+    }
+    
+    .document-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 15px;
+    }
+    
+    .document-card p {
+      color: #475569;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+    
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: #334155;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+    
+    .download-btn:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(51, 65, 85, 0.3);
+    }
+    
+    .motivation-section {
+      background: white;
+      border-radius: 12px;
+      padding: 50px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+    }
+    
+    .motivation-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 20px;
+    }
+    
+    .motivation-section p {
+      font-size: 1.1rem;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .motivation-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      background: #059669;
+      color: white;
+      border: none;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .motivation-btn:hover {
+      background: #047857;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+    
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 0;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      animation: modalSlideIn 0.3s ease-out;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .modal-header {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px 12px 0 0;
+      text-align: center;
+      position: relative;
+    }
+    
+    .modal-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .modal-header p {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+    
+    .modal-body {
+      padding: 40px;
+    }
+    
+    .close {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+    
+    .form-group {
+      margin-bottom: 24px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #334155;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
+    }
+    
+    .form-group textarea {
+      height: 100px;
+      resize: vertical;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #059669;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+      margin-top: 10px;
+    }
+    
+    .submit-btn:hover {
+      background: #047857;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+    }
+    
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    @media (max-width: 768px) {
+      .page-header {
+        padding: 30px 20px;
+      }
+      
+      .page-header h1 {
+        font-size: 2.2rem;
+      }
+      
+      .document-card,
+      .motivation-section {
+        padding: 30px 20px;
+      }
+      
+      .modal-content {
+        margin: 10% auto;
+        width: 95%;
+      }
+      
+      .modal-body {
+        padding: 30px 20px;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      header {
+        padding: 15px 20px;
+      }
+      
+      .navbar {
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
 
+<header>
+  <h2 class="portfolio-title">Portfolio</h2>
+  <nav class="navbar">
+    <a href="wer-bin-ich.html">Über mich</a>
+    <a href="bisherige-leistungen.html">Erfahrungen</a>
+    <a href="kontakt.html">Kontakt</a>
+    <a href="unterlagen.html" class="active">Unterlagen</a>
+    <button class="logout-btn" onclick="logout()">Abmelden</button>
+  </nav>
+</header>
+
+<div class="main-container">
+  <div class="content-container">
+    <div class="page-header">
+      <h1>Bewerbungsunterlagen</h1>
+      <p>Hier finden Sie alle relevanten Dokumente zu meiner beruflichen Qualifikation. Gerne erstelle ich auf Anfrage ein individuelles Motivationsschreiben für Ihre spezifische Position.</p>
+    </div>
+
+    <div class="documents-grid">
+      <div class="document-card">
+        <span class="document-icon">📄</span>
+        <h3>Curriculum Vitae</h3>
+        <p>Vollständiger Lebenslauf mit detaillierter Darstellung meiner Ausbildung, Berufserfahrung und Qualifikationen.</p>
+        <a href="Unterlagen/Boris Kumbric - Lebenslauf.pdf" download class="download-btn">
+          <span>📥</span>
+          Download PDF
+        </a>
+      </div>
+    </div>
+
+    <div class="motivation-section">
+      <h2>Individuelles Motivationsschreiben</h2>
+      <p>Für eine zielgerichtete Bewerbung erstelle ich gerne ein auf Ihre Stellenausschreibung zugeschnittenes Motivationsschreiben. Die Ausarbeitung erfolgt innerhalb einer Woche nach Ihrer Anfrage.</p>
+      
+      <button class="motivation-btn" onclick="openModal()">
+        <span>📝</span>
+        Motivationsschreiben anfordern
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal für Motivationsschreiben -->
+<div id="motivationModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3>Motivationsschreiben Anfrage</h3>
+      <p>Bitte teilen Sie mir Details zur gewünschten Position mit, damit ich ein passendes Motivationsschreiben erstellen kann.</p>
+    </div>
+    <div class="modal-body">
+      <form id="motivationForm" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="89e9d896-ea74-474d-94da-24e439e72040">
+        <input type="hidden" name="subject" value="Anfrage Motivationsschreiben">
+        <input type="hidden" name="from_name" value="Portfolio - Motivationsschreiben">
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">Vorname *</label>
+            <input type="text" id="firstName" name="firstName" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Nachname *</label>
+            <input type="text" id="lastName" name="lastName" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="company">Unternehmen</label>
+          <input type="text" id="company" name="company" placeholder="Firmenname (optional)">
+        </div>
+        
+        <div class="form-group">
+          <label for="email">E-Mail-Adresse *</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="position">Position/Stellenbeschreibung *</label>
+          <textarea id="position" name="position" placeholder="Beschreibung der ausgeschriebenen Position..." required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="additionalInfo">Zusätzliche Informationen</label>
+          <textarea id="additionalInfo" name="additionalInfo" placeholder="Weitere relevante Details für das Motivationsschreiben..."></textarea>
+        </div>
+        
+        <input type="checkbox" name="
